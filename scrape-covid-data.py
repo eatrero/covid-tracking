@@ -16,7 +16,7 @@ california = int(
 
 timeline = json.loads(soup.find('script', id="counties-timeseries-data").text)
 
-san_diego = timeline[36]['case_table'][-1]
+#san_diego = timeline[36]['case_table'][-1]
 orange = timeline[29]['case_table'][-1]
 los_angeles = timeline[18]['case_table'][-1]
 
@@ -36,7 +36,8 @@ sd_by_city_pdf_url = "https://www.sandiegocounty.gov/content/dam/sdc/hhsa/progra
 sd_tables_by_city = tabula.read_pdf(
     sd_by_city_pdf_url, pages="all", multiple_tables=True)
 
-san_marcos = int(sd_tables_by_city[0].iloc[16][1].split()[0])
+san_marcos = int(sd_tables_by_city[0].iloc[16][1].split()[0].replace(',',''))
+san_diego_county = int(sd_tables_by_city[0].iloc[48][1].split()[0].replace(',',''))
 
 # Get US Daily
 us_daily_url = 'https://covidtracking.com/api/v1/us/daily.json'
@@ -46,4 +47,4 @@ us_daily = requests.get(us_daily_url)
 us_daily_json = json.loads(us_daily.content)
 us_positive = us_daily_json[0]['positive']
 
-print(f'{my_zip};{san_marcos};{san_diego};{orange};{los_angeles};{california};{us_positive}')
+print(f'{my_zip};{san_marcos};{san_diego_county};{orange};{los_angeles};{california};{us_positive}')
